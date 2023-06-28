@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
-from pick_em.serializers import UserSerializer, GroupSerializer, teamSerializer, locationSerializer, scheduleSerializer
+from pick_em.serializers import UserSerializer, GroupSerializer, teamSerializer, locationSerializer, scheduleSerializer, scheduleDataSerializer
 from pick_em.models import Team, Location, Schedule
 
 
@@ -32,4 +32,8 @@ class locationViewSet(viewsets.ModelViewSet):
 
 class scheduleViewSet(viewsets.ModelViewSet):
     serializer_class = scheduleSerializer
+    queryset = Schedule.objects.all()
+
+class scheduleDataViewSet(viewsets.ModelViewSet):
+    serializer_class = scheduleDataSerializer
     queryset = Schedule.objects.all()

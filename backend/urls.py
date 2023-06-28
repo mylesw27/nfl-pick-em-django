@@ -25,6 +25,7 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'teams', views.teamViewSet)
 router.register(r'locations', views.locationViewSet)
 router.register(r'schedules', views.scheduleViewSet)
+router.register(r'scheduledata', views.scheduleDataViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

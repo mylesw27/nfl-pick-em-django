@@ -25,4 +25,12 @@ class locationSerializer(serializers.ModelSerializer):
 class scheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['schedule_week', 'schedule_date', 'schedule_time', 'schedule_season', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
+        fields = ['schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
+
+class scheduleDataSerializer(serializers.ModelSerializer):
+    schedule_away_team = teamSerializer()
+    schedule_home_team = teamSerializer()
+    schedule_location = locationSerializer()
+    class Meta:
+        model = Schedule
+        fields = ['schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
