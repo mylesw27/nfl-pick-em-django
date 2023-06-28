@@ -1,0 +1,7 @@
+db.sqlite3
+env
+.env
+
+backend/__pycache__
+
+pick_em/__pycache__
