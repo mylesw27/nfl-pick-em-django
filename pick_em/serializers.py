@@ -5,7 +5,7 @@ from pick_em.models import Team, Location, Schedule
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['id', 'url', 'username', 'email', 'groups']
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -25,7 +25,7 @@ class locationSerializer(serializers.ModelSerializer):
 class scheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
+        fields = ['id', 'schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
 
 class scheduleDataSerializer(serializers.ModelSerializer):
     schedule_away_team = teamSerializer()
@@ -33,4 +33,4 @@ class scheduleDataSerializer(serializers.ModelSerializer):
     schedule_location = locationSerializer()
     class Meta:
         model = Schedule
-        fields = ['schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
+        fields = ['id', 'schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
