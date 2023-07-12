@@ -35,7 +35,7 @@ class Schedule(models.Model):
 class League(models.Model):
     league_name = models.CharField(max_length=50)
     league_admin = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    league_members = models.ManyToManyField('auth.User', through='League_Members', related_name='league_members')
+    # league_members = models.ManyToManyField('auth.User', through='League_Members', related_name='league_members', blank=True, null=True)
     
     def __str__(self):
         return self.league_name

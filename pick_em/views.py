@@ -37,3 +37,11 @@ class scheduleViewSet(viewsets.ModelViewSet):
 class scheduleDataViewSet(viewsets.ModelViewSet):
     serializer_class = scheduleDataSerializer
     queryset = Schedule.objects.all()
+
+    def get_queryset(self):
+        queryset = Schedule.objects.all()
+        week = self.request.query_params.get('week', None)
+        print(week)
+        if week is not None:
+            queryset = queryset.filter(schedule_week=week)
+        return queryset

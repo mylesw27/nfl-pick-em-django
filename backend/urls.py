@@ -24,11 +24,11 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'teams', views.teamViewSet)
 router.register(r'locations', views.locationViewSet)
-router.register(r'schedules', views.scheduleViewSet)
+router.register(r'schedules', views.scheduleViewSet, basename="schedules")
 router.register(r'scheduledata', views.scheduleDataViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
