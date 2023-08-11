@@ -52,7 +52,9 @@ class Picks(models.Model):
     league_id = models.ForeignKey(League, on_delete=models.CASCADE)
     game_id = models.ForeignKey(Schedule, on_delete=models.CASCADE)
     pick_team_id = models.ForeignKey(Team, on_delete=models.CASCADE, blank=True, null=True)
+    outcome = models.BooleanField(blank=True, null=True)
+    point_stake = models.IntegerField(blank=True, null=True, default=1)
+    points_awarded = models.IntegerField(blank=True, null=True)
 
-
-
-
+    def __str__(self):
+        return f'{self.user_id} - {self.league_id} - {self.game_id} - {self.pick_team_id}'

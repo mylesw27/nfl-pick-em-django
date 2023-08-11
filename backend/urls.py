@@ -26,8 +26,14 @@ router.register(r'teams', views.teamViewSet)
 router.register(r'locations', views.locationViewSet)
 router.register(r'schedules', views.scheduleViewSet, basename="schedules")
 router.register(r'scheduledata', views.scheduleDataViewSet)
+router.register(r'leagues', views.leagueViewSet)
+router.register(r'leaguemembers', views.leagueMembersViewSet)
+router.register(r'picks', views.picksViewSet, basename="picks")
+router.register(r'createpicks', views.createPicksViewSet)
+router.register(r'picksdata', views.picksDataViewSet, basename="picksdata")
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

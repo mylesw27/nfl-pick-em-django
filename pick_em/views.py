@@ -1,9 +1,13 @@
 from django.contrib.auth.models import User, Group
+from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import permissions
-from pick_em.serializers import UserSerializer, GroupSerializer, teamSerializer, locationSerializer, scheduleSerializer, scheduleDataSerializer
-from pick_em.models import Team, Location, Schedule
+from rest_framework.response import Response
+from pick_em.serializers import UserSerializer, GroupSerializer, teamSerializer, locationSerializer, scheduleSerializer, scheduleDataSerializer, leagueSerializer, leagueMembersSerializer, picksSerializer, picksDataSerializer
+from pick_em.models import Team, Location, Schedule, League, League_Members, Picks
 
+def home(request):
+    return render(request, 'index.html')
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -45,3 +49,44 @@ class scheduleDataViewSet(viewsets.ModelViewSet):
         if week is not None:
             queryset = queryset.filter(schedule_week=week)
         return queryset
+    
+class leagueViewSet(viewsets.ModelViewSet):
+    serializer_class = leagueSerializer
+    queryset = League.objects.all()
+
+class leagueMembersViewSet(viewsets.ModelViewSet):
+    serializer_class = leagueMembersSerializer
+    queryset = League_Members.objects.all()
+
+class picksViewSet(viewsets.ModelViewSet):
+    serializer_class = picksSerializer
+    queryset = Picks.objects.all()
+
+class picksDataViewSet(viewsets.ModelViewSet):
+    serializer_class = picksDataSerializer
+    queryset = Picks.objects.all()
+
+class createPicksViewSet(viewsets.ModelViewSet):
+    serializer_class = picksSerializer
+    queryset = Picks.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        user = request.data.get('userId')
+        league = request.data.get('league')
+        picks = request.data.get('picks')
+        
+
+        found_user = User.objects.get(id=user)
+        found_league = League.objects.get(id=league)
+
+        for pick in picks:
+            game = Schedule.objects.get(id=pick)
+            team = Team.objects.get(id=picks[pick])
+            print(f'User: {found_user}, League: {found_league}, Game: {pick}, Selection: {picks[pick]}')
+            existing_pick = Picks.objects.filter(user_id=found_user, league_id=found_league, game_id=game)
+            if existing_pick:
+                existing_pick.update(pick_team_id=team)
+            else:
+                new_pick = Picks.objects.create(user_id=found_user, league_id=found_league, game_id=game, pick_team_id= team)
+                new_pick.save()
+        return Response({'message': picks}, status=200)
