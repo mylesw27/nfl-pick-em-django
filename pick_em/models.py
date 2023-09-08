@@ -28,6 +28,10 @@ class Schedule(models.Model):
     schedule_away_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='away_team')
     schedule_home_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home_team')
     schedule_location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    game_complete = models.BooleanField(default=False)
+    away_team_score = models.IntegerField(blank=True, null=True)
+    home_team_score = models.IntegerField(blank=True, null=True)
+    game_winner = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='game_winner', blank=True, null=True)
 
     def __str__(self):
         return f'Week {self.schedule_week} - {self.schedule_away_team.team_name} @ {self.schedule_home_team.team_name}'

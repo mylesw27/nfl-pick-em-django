@@ -5,7 +5,7 @@ from pick_em.models import Team, Location, Schedule, League, League_Members, Pic
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'url', 'username', 'email', 'groups']
+        fields = ['id', 'username', 'email', 'groups']
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -25,7 +25,7 @@ class locationSerializer(serializers.ModelSerializer):
 class scheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['id', 'schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location']
+        fields = ['id', 'schedule_week', 'schedule_date', 'schedule_time', 'schedule_away_team', 'schedule_home_team', 'schedule_location', 'game_complete', 'away_team_score', 'home_team_score', 'game_winner']
 
 class scheduleDataSerializer(serializers.ModelSerializer):
     schedule_away_team = teamSerializer()
@@ -41,6 +41,13 @@ class leagueSerializer(serializers.ModelSerializer):
         fields = ['id', 'league_name', 'league_admin']
 
 class leagueMembersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = League_Members
+        fields = ['id', 'league_id', 'user_id']
+
+class leagueMembersDataSerializer(serializers.ModelSerializer):
+    user_id = UserSerializer()
+    league_id = leagueSerializer()
     class Meta:
         model = League_Members
         fields = ['id', 'league_id', 'user_id']

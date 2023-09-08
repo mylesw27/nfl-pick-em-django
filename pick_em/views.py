@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
-from pick_em.serializers import UserSerializer, GroupSerializer, teamSerializer, locationSerializer, scheduleSerializer, scheduleDataSerializer, leagueSerializer, leagueMembersSerializer, picksSerializer, picksDataSerializer
+from pick_em.serializers import UserSerializer, GroupSerializer, teamSerializer, locationSerializer, scheduleSerializer, scheduleDataSerializer, leagueSerializer, leagueMembersSerializer, leagueMembersDataSerializer, picksSerializer, picksDataSerializer
 from pick_em.models import Team, Location, Schedule, League, League_Members, Picks
 
 def home(request):
@@ -53,10 +53,23 @@ class scheduleDataViewSet(viewsets.ModelViewSet):
 class leagueViewSet(viewsets.ModelViewSet):
     serializer_class = leagueSerializer
     queryset = League.objects.all()
-
+    
 class leagueMembersViewSet(viewsets.ModelViewSet):
     serializer_class = leagueMembersSerializer
     queryset = League_Members.objects.all()
+    
+class leagueMembersDataViewSet(viewsets.ModelViewSet):
+    serializer_class = leagueMembersDataSerializer
+    queryset = League_Members.objects.all()
+
+    def get_queryset(self):
+        queryset = League_Members.objects.all()
+        league = self.request.query_params.get('league', None)
+        print(league)
+        if league is not None:
+            queryset = queryset.filter(league_id=league)
+            print(league)
+        return queryset
 
 class picksViewSet(viewsets.ModelViewSet):
     serializer_class = picksSerializer
@@ -66,6 +79,23 @@ class picksDataViewSet(viewsets.ModelViewSet):
     serializer_class = picksDataSerializer
     queryset = Picks.objects.all()
 
+    def get_queryset(self):
+        queryset = Picks.objects.all().order_by('game_id')
+        league = self.request.query_params.get('league', None)
+        user = self.request.query_params.get('user', None)
+        week = self.request.query_params.get('week', None)
+        print(league)
+        if league is not None:
+            queryset = queryset.filter(league_id=league)
+            print(league)
+        if user is not None:
+            queryset = queryset.filter(user_id=user)
+            print(user)
+        if week is not None:
+            queryset = queryset.filter(game_id__schedule_week=week)
+            print(week)
+        return queryset
+
 class createPicksViewSet(viewsets.ModelViewSet):
     serializer_class = picksSerializer
     queryset = Picks.objects.all()
@@ -74,7 +104,6 @@ class createPicksViewSet(viewsets.ModelViewSet):
         user = request.data.get('userId')
         league = request.data.get('league')
         picks = request.data.get('picks')
-        
 
         found_user = User.objects.get(id=user)
         found_league = League.objects.get(id=league)
